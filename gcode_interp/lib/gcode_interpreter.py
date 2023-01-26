@@ -1,8 +1,8 @@
 import re
 from datetime import datetime
 from dataclasses import dataclass
-from utils import util
-from utils.exceptions import GcodeParseError, GcodeValidationError, GcodeInterpretationError
+from gcode_interp.utils import util
+from gcode_interp.utils.exceptions import GcodeParseError, GcodeValidationError, GcodeInterpretationError
 
 FILE_PATH = "/Book_Display_6h42m_0.2mm_205C_PLA_ENDER3.gcode"
 
