@@ -27,34 +27,33 @@ void init_buffer(circular_buffer *buffer){
     buffer->length = strlen(buffer->element);
 }
 
-char empty_index_value(char element[]){
-    return *strcpy(element, NULL);
-}
-
 int is_empty(circular_buffer *buffer){
-    return buffer->head == buffer->curr;
+    return buffer->length == 0;
 }
 
 int is_full(circular_buffer *buffer){
-    return (buffer->head + 1) % BUFFER_SIZE == buffer->curr;
+    return buffer->length == BUFFER_SIZE;
 }
 
 void enqueue(circular_buffer *buffer, char *item){
     if(is_full(buffer)){
-        exit(1);
+        exit(1); // clean this up so that there is a more informational error. plus, we don't want to exit
     }
-    strcpy(buffer->element[buffer->curr], item);
-    buffer->head = (buffer->head + 1) % BUFFER_SIZE;
+    strcpy(buffer->element[buffer->head], item);
+    (buffer->head++) % BUFFER_SIZE;
+    //(buffer->curr++) % BUFFER_SIZE;
     buffer->length++;
 }
 
 char* dequeue(circular_buffer *buffer){
-    static char removed_item[STR_SIZE];
     if(is_empty(buffer)){
         return NULL;
     }
+    char removed_item[strlen(buffer->element[buffer->curr]+1)];
     strcpy(removed_item, buffer->element[buffer->curr]);
-    buffer->curr = (buffer->curr + 1) % BUFFER_SIZE;
+    (buffer->curr--) % BUFFER_SIZE;
+    (buffer->head--) % BUFFER_SIZE;
+    buffer->length--;
     return removed_item;
 }
 
