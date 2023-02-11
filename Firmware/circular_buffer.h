@@ -15,16 +15,16 @@
 
 typedef struct
 {
-    int head; // where elements can be added to the buffer
-    int curr; // current element of the buffer
-    int length;
-    char element[BUFFER_SIZE][STR_SIZE];
+    int next; // where elements can be added to the buffer
+    int curr; // current elements of the buffer
+    int length; // length of array occupied by an elements
+    char elements[BUFFER_SIZE][STR_SIZE];
 }circular_buffer;
 
 void init_buffer(circular_buffer *buffer){
-    buffer->head = 0;
+    buffer->next = 0;
     buffer->curr = 0;
-    buffer->length = strlen(buffer->element);
+    buffer->length = strlen(buffer->elements);
 }
 
 int is_empty(circular_buffer *buffer){
@@ -39,22 +39,19 @@ void enqueue(circular_buffer *buffer, char *item){
     if(is_full(buffer)){
         exit(1); // clean this up so that there is a more informational error. plus, we don't want to exit
     }
-    strcpy(buffer->element[buffer->head], item);
-    (buffer->head++) % BUFFER_SIZE;
+    strcpy(buffer->elements[buffer->next], item);
+    (buffer->next++) % BUFFER_SIZE;
     //(buffer->curr++) % BUFFER_SIZE;
     buffer->length++;
 }
 
-char* dequeue(circular_buffer *buffer){
+void dequeue(circular_buffer *buffer, char *removed_arr){
     if(is_empty(buffer)){
-        return NULL;
+        // return NULL;
     }
-    char removed_item[strlen(buffer->element[buffer->curr]+1)];
-    strcpy(removed_item, buffer->element[buffer->curr]);
-    (buffer->curr--) % BUFFER_SIZE;
-    (buffer->head--) % BUFFER_SIZE;
+    strcpy(removed_arr, buffer->elements[buffer->curr]);
+    (buffer->curr++) % BUFFER_SIZE;
     buffer->length--;
-    return removed_item;
 }
 
 #endif //JADE_3D_PRINTER_CIRCULAR_BUFFER_H
